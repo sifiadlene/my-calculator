@@ -33,13 +33,23 @@ function calculate(operand1, operand2, operation) {
         case '/':
             uri += "?operation=divide";
             break;
+        case '%':
+            uri += "?operation=modulo";
+            break;
+        case 'sqrt':
+            uri += "?operation=sqrt";
+            break;
         default:
             setError();
             return;
     }
 
     uri += "&operand1=" + encodeURIComponent(operand1);
-    uri += "&operand2=" + encodeURIComponent(operand2);
+    
+    // Only add operand2 for binary operations
+    if (operation !== 'sqrt') {
+        uri += "&operand2=" + encodeURIComponent(operand2);
+    }
 
     setLoading(true);
 
@@ -113,6 +123,14 @@ function signPressed() {
 function operationPressed(op) {
     operand1 = getValue();
     operation = op;
+    
+    // If square root, we can calculate immediately
+    if (op === 'sqrt') {
+        calculate(operand1, 0, operation);
+        state = states.complete;
+        return;
+    }
+    
     state = states.operator;
 }
 
