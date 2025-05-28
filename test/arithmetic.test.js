@@ -247,6 +247,62 @@ describe('Arithmetic', function () {
                     done();
                 });
         });
+        it('calculates modulo with divisor of 1', function (done) {
+            request.get('/arithmetic?operation=modulo&operand1=42&operand2=1')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 0 });
+                    done();
+                });
+        });
+        it('calculates modulo with dividend smaller than divisor', function (done) {
+            request.get('/arithmetic?operation=modulo&operand1=3&operand2=10')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 3 });
+                    done();
+                });
+        });
+        it('calculates modulo with identical dividend and divisor', function (done) {
+            request.get('/arithmetic?operation=modulo&operand1=5&operand2=5')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 0 });
+                    done();
+                });
+        });
+        it('calculates modulo with large dividend and small divisor', function (done) {
+            request.get('/arithmetic?operation=modulo&operand1=1000&operand2=3')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 1 });
+                    done();
+                });
+        });
+        it('calculates modulo with both negative dividend and divisor', function (done) {
+            request.get('/arithmetic?operation=modulo&operand1=-10&operand2=-3')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: -1 });
+                    done();
+                });
+        });
+        it('calculates modulo with exponential notation', function (done) {
+            request.get('/arithmetic?operation=modulo&operand1=1e2&operand2=3e0')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 1 });
+                    done();
+                });
+        });
+        it('handles modulo by zero', function (done) {
+            request.get('/arithmetic?operation=modulo&operand1=10&operand2=0')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body.result).to.be.null;
+                    done();
+                });
+        });
     });
 
     describe('Square Root', function () {
