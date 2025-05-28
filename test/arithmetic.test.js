@@ -205,4 +205,39 @@ describe('Arithmetic', function () {
                 });
         });
     });
+
+    describe('Patate (Modulo)', function () {
+        it('computes modulo of two positive integers', function (done) {
+            request.get('/arithmetic?operation=patate&operand1=21&operand2=4')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 1 });
+                    done();
+                });
+        });
+        it('computes modulo when dividend is smaller than divisor', function (done) {
+            request.get('/arithmetic?operation=patate&operand1=3&operand2=5')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 3 });
+                    done();
+                });
+        });
+        it('computes modulo with negative dividend', function (done) {
+            request.get('/arithmetic?operation=patate&operand1=-21&operand2=4')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: -1 });
+                    done();
+                });
+        });
+        it('computes modulo with floating point numbers', function (done) {
+            request.get('/arithmetic?operation=patate&operand1=7.5&operand2=2.5')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 0 });
+                    done();
+                });
+        });
+    });
 });
