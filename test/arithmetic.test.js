@@ -303,6 +303,31 @@ describe('Arithmetic', function () {
                     done();
                 });
         });
+        it('calculates modulo with very small decimal numbers', function (done) {
+            request.get('/arithmetic?operation=modulo&operand1=0.0003&operand2=0.0001')
+                .expect(200)
+                .end(function (err, res) {
+                    // JavaScript's modulo with floating point can have precision issues
+                    expect(res.body.result).to.be.closeTo(0.0, 0.0001);
+                    done();
+                });
+        });
+        it('calculates modulo with different decimal precisions', function (done) {
+            request.get('/arithmetic?operation=modulo&operand1=10.5&operand2=0.3')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body.result).to.be.closeTo(0.0, 0.0001);
+                    done();
+                });
+        });
+        it('calculates modulo with extremely large numbers', function (done) {
+            request.get('/arithmetic?operation=modulo&operand1=1e15&operand2=7')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 6 });
+                    done();
+                });
+        });
     });
 
     describe('Square Root', function () {
