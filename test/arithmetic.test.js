@@ -205,4 +205,98 @@ describe('Arithmetic', function () {
                 });
         });
     });
+
+    describe('Modulo', function () {
+        it('calculates modulo of two positive integers', function (done) {
+            request.get('/arithmetic?operation=modulo&operand1=10&operand2=3')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 1 });
+                    done();
+                });
+        });
+        it('calculates modulo with zero result', function (done) {
+            request.get('/arithmetic?operation=modulo&operand1=9&operand2=3')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 0 });
+                    done();
+                });
+        });
+        it('calculates modulo with negative dividend', function (done) {
+            request.get('/arithmetic?operation=modulo&operand1=-10&operand2=3')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: -1 });
+                    done();
+                });
+        });
+        it('calculates modulo with negative divisor', function (done) {
+            request.get('/arithmetic?operation=modulo&operand1=10&operand2=-3')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 1 });
+                    done();
+                });
+        });
+        it('calculates modulo with floating point numbers', function (done) {
+            request.get('/arithmetic?operation=modulo&operand1=7.5&operand2=2.5')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 0 });
+                    done();
+                });
+        });
+    });
+
+    describe('Square Root', function () {
+        it('calculates square root of a positive integer', function (done) {
+            request.get('/arithmetic?operation=sqrt&operand1=9')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 3 });
+                    done();
+                });
+        });
+        it('calculates square root of a perfect square', function (done) {
+            request.get('/arithmetic?operation=sqrt&operand1=16')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 4 });
+                    done();
+                });
+        });
+        it('calculates square root of zero', function (done) {
+            request.get('/arithmetic?operation=sqrt&operand1=0')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 0 });
+                    done();
+                });
+        });
+        it('calculates square root of a floating point number', function (done) {
+            request.get('/arithmetic?operation=sqrt&operand1=2.25')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 1.5 });
+                    done();
+                });
+        });
+        it('calculates square root of a non-perfect square', function (done) {
+            request.get('/arithmetic?operation=sqrt&operand1=2')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body.result).to.be.closeTo(1.414, 0.001);
+                    done();
+                });
+        });
+        it('returns null for negative number (NaN converted to null in JSON)', function (done) {
+            request.get('/arithmetic?operation=sqrt&operand1=-4')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body.result).to.be.null;
+                    done();
+                });
+        });
+    });
 });

@@ -33,6 +33,12 @@ function calculate(operand1, operand2, operation) {
         case '/':
             uri += "?operation=divide";
             break;
+        case '%':
+            uri += "?operation=modulo";
+            break;
+        case '√':
+            uri += "?operation=sqrt";
+            break;
         default:
             setError();
             return;
@@ -116,6 +122,28 @@ function operationPressed(op) {
     state = states.operator;
 }
 
+function sqrtPressed() {
+    var currentValue = getValue();
+    var uri = location.origin + "/arithmetic?operation=sqrt&operand1=" + encodeURIComponent(currentValue);
+    
+    setLoading(true);
+    
+    var http = new XMLHttpRequest();
+    http.open("GET", uri, true);
+    http.onload = function () {
+        setLoading(false);
+        
+        if (http.status == 200) {
+            var response = JSON.parse(http.responseText);
+            setValue(response.result);
+            state = states.complete;
+        } else {
+            setError();
+        }
+    };
+    http.send(null);
+}
+
 function equalPressed() {
     if (state < states.operand2) {
         state = states.complete;
@@ -138,10 +166,13 @@ document.addEventListener('keypress', (event) => {
         numberPressed(event.key);
     } else if (event.key == '.') {
         decimalPressed();
-    } else if (event.key.match(/^[-*+/]$/)) {
+    } else if (event.key.match(/^[-*+/%]$/)) {
         operationPressed(event.key);
     } else if (event.key == '=') {
         equalPressed();
+    } else if (event.key == 's') {
+        // 's' for square root
+        sqrtPressed();
     }
 });
 
