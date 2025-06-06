@@ -205,4 +205,82 @@ describe('Arithmetic', function () {
                 });
         });
     });
+
+    describe('Square Root', function () {
+        it('calculates square root of a positive integer', function (done) {
+            request.get('/arithmetic?operation=sqrt&operand1=16')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 4 });
+                    done();
+                });
+        });
+        it('calculates square root of zero', function (done) {
+            request.get('/arithmetic?operation=sqrt&operand1=0')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 0 });
+                    done();
+                });
+        });
+        it('calculates square root of a floating point number', function (done) {
+            request.get('/arithmetic?operation=sqrt&operand1=2.25')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 1.5 });
+                    done();
+                });
+        });
+        it('rejects square root of negative number', function (done) {
+            request.get('/arithmetic?operation=sqrt&operand1=-9')
+                .expect(400)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ error: "Impossible de calculer la racine carrée d'un nombre négatif" });
+                    done();
+                });
+        });
+    });
+
+    describe('Logarithm Base 10', function () {
+        it('calculates log10 of 1000', function (done) {
+            request.get('/arithmetic?operation=log10&operand1=1000')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 3 });
+                    done();
+                });
+        });
+        it('calculates log10 of 1', function (done) {
+            request.get('/arithmetic?operation=log10&operand1=1')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 0 });
+                    done();
+                });
+        });
+        it('calculates log10 of 10', function (done) {
+            request.get('/arithmetic?operation=log10&operand1=10')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 1 });
+                    done();
+                });
+        });
+        it('rejects log10 of zero', function (done) {
+            request.get('/arithmetic?operation=log10&operand1=0')
+                .expect(400)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ error: "Impossible de calculer le logarithme d'un nombre inférieur ou égal à zéro" });
+                    done();
+                });
+        });
+        it('rejects log10 of negative number', function (done) {
+            request.get('/arithmetic?operation=log10&operand1=-5')
+                .expect(400)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ error: "Impossible de calculer le logarithme d'un nombre inférieur ou égal à zéro" });
+                    done();
+                });
+        });
+    });
 });

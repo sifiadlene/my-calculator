@@ -33,13 +33,22 @@ function calculate(operand1, operand2, operation) {
         case '/':
             uri += "?operation=divide";
             break;
+        case 'sqrt':
+            uri += "?operation=sqrt";
+            break;
+        case 'log10':
+            uri += "?operation=log10";
+            break;
         default:
             setError();
             return;
     }
 
     uri += "&operand1=" + encodeURIComponent(operand1);
-    uri += "&operand2=" + encodeURIComponent(operand2);
+    // Only add operand2 for binary operations
+    if (operation !== 'sqrt' && operation !== 'log10') {
+        uri += "&operand2=" + encodeURIComponent(operand2);
+    }
 
     setLoading(true);
 
@@ -52,7 +61,8 @@ function calculate(operand1, operand2, operation) {
             var response = JSON.parse(http.responseText);
             setValue(response.result);
         } else {
-            setError();
+            var response = JSON.parse(http.responseText);
+            setError(response.error);
         }
     };
     http.send(null);
@@ -132,6 +142,18 @@ function equalPressed() {
     calculate(operand1, operand2, operation);
 }
 
+function sqrtPressed() {
+    var currentValue = getValue();
+    state = states.complete;
+    calculate(currentValue, null, 'sqrt');
+}
+
+function log10Pressed() {
+    var currentValue = getValue();
+    state = states.complete;
+    calculate(currentValue, null, 'log10');
+}
+
 // TODO: Add key press logics
 document.addEventListener('keypress', (event) => {
     if (event.key.match(/^\d+$/)) {
@@ -181,8 +203,12 @@ function setValue(n) {
     document.getElementById("result").innerHTML = html;
 }
 
-function setError(n) {
-    document.getElementById("result").innerHTML = "ERROR";
+function setError(message) {
+    if (message) {
+        document.getElementById("result").innerHTML = message;
+    } else {
+        document.getElementById("result").innerHTML = "ERROR";
+    }
 }
 
 function setLoading(loading) {
