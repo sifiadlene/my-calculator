@@ -1,7 +1,11 @@
 var supertest = require('supertest');
-var chai = require('chai');
 var app = require('../server');
 
 global.app = app;
-global.expect = chai.expect;
 global.request = supertest(app);
+
+// Dynamically import chai since it's an ES module
+(async () => {
+  const chai = await import('chai');
+  global.expect = chai.expect;
+})();
