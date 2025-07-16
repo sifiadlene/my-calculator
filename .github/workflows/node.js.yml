@@ -25,5 +25,5 @@ jobs:
       - name: Archive test results to GitHub Packages
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ github.ref_name }}-${{ github.run_id }}-${{ matrix.node-version }}-test-results
+          name: ${{ replace(github.ref_name, '/', '-') }}-${{ github.run_id }}-${{ matrix.node-version }}-test-results
           path: ./out/test-results.xml
