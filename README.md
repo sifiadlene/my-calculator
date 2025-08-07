@@ -8,6 +8,18 @@ In this fun workshop, you will learn how to use GitHub Copilot to enhance a node
 
 The project contains a simple node.js application that exposes REST APIs to perform arithmetic on integers, and provides a test suite with mocha and chai.
 
+## Available Operations
+
+The calculator supports the following operations via REST API:
+
+- **Addition**: `GET /arithmetic?operation=add&operand1=5&operand2=3`
+- **Subtraction**: `GET /arithmetic?operation=subtract&operand1=5&operand2=3`
+- **Multiplication**: `GET /arithmetic?operation=multiply&operand1=5&operand2=3`
+- **Division**: `GET /arithmetic?operation=divide&operand1=6&operand2=3`
+- **Square Root**: `GET /arithmetic?operation=sqrt&operand1=25` (single operand only)
+
+Note: Square root operation does not accept negative numbers.
+
 Estimated time to complete: `10 to 60 minutes`
 
 Participants will be guided to install the GitHub Copilot VS Code extension, and then use it to enhance a simple Node Calculator app. You will also use GitHub Copilot to write some missing unit tests for the Calculator app.

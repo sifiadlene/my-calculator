@@ -293,4 +293,71 @@ describe('Arithmetic', function () {
                 });
         });
     });
+
+    describe('Square Root', function () {
+        it('calculates square root of a positive integer', function (done) {
+            request.get('/arithmetic?operation=sqrt&operand1=25')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 5 });
+                    done();
+                });
+        });
+        it('calculates square root of zero', function (done) {
+            request.get('/arithmetic?operation=sqrt&operand1=0')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 0 });
+                    done();
+                });
+        });
+        it('calculates square root of a decimal number', function (done) {
+            request.get('/arithmetic?operation=sqrt&operand1=2.25')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 1.5 });
+                    done();
+                });
+        });
+        it('calculates square root of 1', function (done) {
+            request.get('/arithmetic?operation=sqrt&operand1=1')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 1 });
+                    done();
+                });
+        });
+        it('calculates square root with exponential notation', function (done) {
+            request.get('/arithmetic?operation=sqrt&operand1=1e2')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 10 });
+                    done();
+                });
+        });
+        it('rejects square root of negative number', function (done) {
+            request.get('/arithmetic?operation=sqrt&operand1=-25')
+                .expect(400)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ error: "Square root of negative number is not allowed" });
+                    done();
+                });
+        });
+        it('rejects square root of negative decimal', function (done) {
+            request.get('/arithmetic?operation=sqrt&operand1=-0.5')
+                .expect(400)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ error: "Square root of negative number is not allowed" });
+                    done();
+                });
+        });
+        it('works without operand2 parameter', function (done) {
+            request.get('/arithmetic?operation=sqrt&operand1=16')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 4 });
+                    done();
+                });
+        });
+    });
 });
