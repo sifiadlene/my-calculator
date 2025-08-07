@@ -33,13 +33,20 @@ function calculate(operand1, operand2, operation) {
         case '/':
             uri += "?operation=divide";
             break;
+        case '√':
+            uri += "?operation=squareroot";
+            break;
         default:
             setError();
             return;
     }
 
     uri += "&operand1=" + encodeURIComponent(operand1);
-    uri += "&operand2=" + encodeURIComponent(operand2);
+    
+    // Only add operand2 for binary operations
+    if (operation !== '√') {
+        uri += "&operand2=" + encodeURIComponent(operand2);
+    }
 
     setLoading(true);
 
@@ -111,9 +118,18 @@ function signPressed() {
 }
 
 function operationPressed(op) {
-    operand1 = getValue();
-    operation = op;
-    state = states.operator;
+    if (op === '√') {
+        // Square root is a unary operation - calculate immediately
+        operand1 = getValue();
+        operation = op;
+        state = states.complete;
+        calculate(operand1, 0, operation);
+    } else {
+        // Binary operations
+        operand1 = getValue();
+        operation = op;
+        state = states.operator;
+    }
 }
 
 function equalPressed() {
@@ -140,8 +156,11 @@ document.addEventListener('keypress', (event) => {
         decimalPressed();
     } else if (event.key.match(/^[-*+/]$/)) {
         operationPressed(event.key);
-    } else if (event.key == '=') {
+    } else if (event.key == '=' || event.key == 'Enter') {
         equalPressed();
+    } else if (event.key == 'r' || event.key == 'R') {
+        // 'r' key for square root
+        operationPressed('√');
     }
 });
 

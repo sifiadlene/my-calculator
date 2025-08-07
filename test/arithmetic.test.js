@@ -293,4 +293,71 @@ describe('Arithmetic', function () {
                 });
         });
     });
+
+    describe('Square Root', function () {
+        it('calculates square root of perfect squares', function (done) {
+            request.get('/arithmetic?operation=squareroot&operand1=9')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 3 });
+                    done();
+                });
+        });
+        it('calculates square root of another perfect square', function (done) {
+            request.get('/arithmetic?operation=squareroot&operand1=16')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 4 });
+                    done();
+                });
+        });
+        it('calculates square root of zero', function (done) {
+            request.get('/arithmetic?operation=squareroot&operand1=0')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 0 });
+                    done();
+                });
+        });
+        it('calculates square root of one', function (done) {
+            request.get('/arithmetic?operation=squareroot&operand1=1')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 1 });
+                    done();
+                });
+        });
+        it('calculates square root of floating point numbers', function (done) {
+            request.get('/arithmetic?operation=squareroot&operand1=2.25')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 1.5 });
+                    done();
+                });
+        });
+        it('handles square root of negative numbers', function (done) {
+            request.get('/arithmetic?operation=squareroot&operand1=-4')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body.result).to.equal(null);
+                    done();
+                });
+        });
+        it('works without operand2 parameter', function (done) {
+            request.get('/arithmetic?operation=squareroot&operand1=25')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 5 });
+                    done();
+                });
+        });
+        it('validates operand1 for square root', function (done) {
+            request.get('/arithmetic?operation=squareroot&operand1=invalid')
+                .expect(400)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ error: "Invalid operand1: invalid" });
+                    done();
+                });
+        });
+    });
 });

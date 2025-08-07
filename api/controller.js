@@ -16,6 +16,7 @@ exports.calculate = function(req, res) {
     'subtract': function(a, b) { return a - b },
     'multiply': function(a, b) { return a * b },
     'divide':   function(a, b) { return a / b },
+    'squareroot': function(a) { return Math.sqrt(Number(a)) },
   };
 
   if (!req.query.operation) {
@@ -34,11 +35,22 @@ exports.calculate = function(req, res) {
     throw new Error("Invalid operand1: " + req.query.operand1);
   }
 
-  if (!req.query.operand2 ||
-      !req.query.operand2.match(/^(-)?[0-9\.]+(e(-)?[0-9]+)?$/) ||
-      req.query.operand2.replace(/[-0-9e]/g, '').length > 1) {
-    throw new Error("Invalid operand2: " + req.query.operand2);
+  // For unary operations like squareroot, operand2 is not required
+  if (req.query.operation !== 'squareroot') {
+    if (!req.query.operand2 ||
+        !req.query.operand2.match(/^(-)?[0-9\.]+(e(-)?[0-9]+)?$/) ||
+        req.query.operand2.replace(/[-0-9e]/g, '').length > 1) {
+      throw new Error("Invalid operand2: " + req.query.operand2);
+    }
   }
 
-  res.json({ result: operation(req.query.operand1, req.query.operand2) });
+  // Call the operation with appropriate number of arguments
+  var result;
+  if (req.query.operation === 'squareroot') {
+    result = operation(req.query.operand1);
+  } else {
+    result = operation(req.query.operand1, req.query.operand2);
+  }
+
+  res.json({ result: result });
 };
