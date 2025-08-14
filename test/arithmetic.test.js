@@ -293,4 +293,47 @@ describe('Arithmetic', function () {
                 });
         });
     });
+
+    describe('Square Root', function () {
+        it('calculates square root of a positive integer', function (done) {
+            request.get('/arithmetic?operation=sqrt&operand1=9')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 3 });
+                    done();
+                });
+        });
+        it('calculates square root of zero', function (done) {
+            request.get('/arithmetic?operation=sqrt&operand1=0')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 0 });
+                    done();
+                });
+        });
+        it('calculates square root of a floating point number', function (done) {
+            request.get('/arithmetic?operation=sqrt&operand1=2.25')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 1.5 });
+                    done();
+                });
+        });
+        it('calculates square root of a negative number', function (done) {
+            request.get('/arithmetic?operation=sqrt&operand1=-4')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: null });
+                    done();
+                });
+        });
+        it('rejects sqrt operation when operand2 is provided', function (done) {
+            request.get('/arithmetic?operation=sqrt&operand1=9&operand2=4')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 3 });
+                    done();
+                });
+        });
+    });
 });
