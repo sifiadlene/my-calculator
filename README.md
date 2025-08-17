@@ -1,3 +1,5 @@
+[![Node.js CI](https://github.com/sifiadlene/my-calculator/actions/workflows/node.js.yml/badge.svg?event=status)](https://github.com/sifiadlene/my-calculator/actions/workflows/node.js.yml)
+
 # GitHub Copilot Workshop
 
 ## Enhance a Node Calculator app using GitHub Copilot
