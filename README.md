@@ -1,4 +1,4 @@
-[![Node.js CI](https://github.com/sifiadlene/my-calculator/actions/workflows/node.js.yml/badge.svg?event=status)](https://github.com/sifiadlene/my-calculator/actions/workflows/node.js.yml)
+[![Node.js CI](https://github.com/sifiadlene/my-calculator/actions/workflows/node.js.yml/badge.svg)](https://github.com/sifiadlene/my-calculator/actions/workflows/node.js.yml)
 
 # GitHub Copilot Workshop
 
