@@ -1,0 +1,56 @@
+{
+  "name": "Node.js CI/CD Pipeline",
+  "description": "Comprehensive CI/CD pipeline for Node.js applications with multi-version testing, code quality checks, and artifact management",
+  "iconName": "nodejs",
+  "categories": [
+    "Continuous Integration",
+    "JavaScript",
+    "Node.js",
+    "Testing",
+    "Code Quality"
+  ],
+  "filePatterns": [
+    "package.json",
+    "package-lock.json",
+    "*.js",
+    "*.mjs",
+    "*.ts",
+    "test/**",
+    "tests/**",
+    "spec/**"
+  ],
+  "properties": {
+    "node_versions": {
+      "type": "array",
+      "description": "Node.js versions to test against",
+      "default": ["18.x", "20.x", "22.x"]
+    },
+    "timeout_minutes": {
+      "type": "number",
+      "description": "Job timeout in minutes",
+      "default": 15
+    },
+    "fail_fast": {
+      "type": "boolean",
+      "description": "Whether to cancel other matrix jobs if one fails",
+      "default": false
+    },
+    "retention_days": {
+      "type": "number",
+      "description": "Number of days to retain artifacts",
+      "default": 30
+    }
+  },
+  "tags": [
+    "ci",
+    "cd",
+    "nodejs",
+    "javascript",
+    "testing",
+    "coverage",
+    "eslint",
+    "security",
+    "audit",
+    "artifacts"
+  ]
+}
