@@ -1,5 +1,5 @@
-var supertest = require('supertest');
-var app = require('../server');
+const supertest = require('supertest');
+const app = require('../server');
 
 global.app = app;
 global.request = supertest(app);

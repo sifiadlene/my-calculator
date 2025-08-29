@@ -1,5 +1,5 @@
-var gulp = require('gulp');
-var inlinesource = require('gulp-inline-source');
+const gulp = require('gulp');
+const inlinesource = require('gulp-inline-source');
 
 gulp.task('inlinesource', function () {
     return gulp.src('./coverage/*.html')

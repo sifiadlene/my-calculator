@@ -11,7 +11,7 @@ exports.calculate = function(req, res) {
   });
 
   // TODO: Add operator
-  var operations = {
+  const operations = {
     'add':      function(a, b) { return Number(a) + Number(b) },
     'subtract': function(a, b) { return a - b },
     'multiply': function(a, b) { return a * b },
@@ -22,7 +22,7 @@ exports.calculate = function(req, res) {
     throw new Error("Unspecified operation");
   }
 
-  var operation = operations[req.query.operation];
+  const operation = operations[req.query.operation];
 
   if (!operation) {
     throw new Error("Invalid operation: " + req.query.operation);
