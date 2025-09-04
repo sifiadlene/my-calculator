@@ -16,6 +16,18 @@ exports.calculate = function(req, res) {
     'subtract': function(a, b) { return a - b },
     'multiply': function(a, b) { return a * b },
     'divide':   function(a, b) { return a / b },
+    'log':      function(a) { 
+      if (Number(a) <= 0) throw new Error('Cannot calculate logarithm of non-positive number');
+      return Math.log(Number(a)); 
+    },
+    'log10':    function(a) { 
+      if (Number(a) <= 0) throw new Error('Cannot calculate logarithm of non-positive number');
+      return Math.log10(Number(a)); 
+    },
+    'sqrt':     function(a) { 
+      if (Number(a) < 0) throw new Error('Cannot calculate square root of negative number');
+      return Math.sqrt(Number(a)); 
+    },
   };
 
   if (!req.query.operation) {
@@ -34,11 +46,17 @@ exports.calculate = function(req, res) {
     throw new Error("Invalid operand1: " + req.query.operand1);
   }
 
-  if (!req.query.operand2 ||
-      !req.query.operand2.match(/^(-)?[0-9\.]+(e(-)?[0-9]+)?$/) ||
-      req.query.operand2.replace(/[-0-9e]/g, '').length > 1) {
-    throw new Error("Invalid operand2: " + req.query.operand2);
-  }
+  const singleOperandOps = ['log', 'log10', 'sqrt'];
+  const isSingleOperandOp = singleOperandOps.includes(req.query.operation);
 
-  res.json({ result: operation(req.query.operand1, req.query.operand2) });
+  if (!isSingleOperandOp) {
+    if (!req.query.operand2 ||
+        !req.query.operand2.match(/^(-)?[0-9\.]+(e(-)?[0-9]+)?$/) ||
+        req.query.operand2.replace(/[-0-9e]/g, '').length > 1) {
+      throw new Error("Invalid operand2: " + req.query.operand2);
+    }
+    res.json({ result: operation(req.query.operand1, req.query.operand2) });
+  } else {
+    res.json({ result: operation(req.query.operand1) });
+  }
 };

@@ -33,13 +33,26 @@ function calculate(operand1, operand2, operation) {
         case '/':
             uri += "?operation=divide";
             break;
+        case 'log':
+            uri += "?operation=log";
+            break;
+        case 'log10':
+            uri += "?operation=log10";
+            break;
+        case 'sqrt':
+            uri += "?operation=sqrt";
+            break;
         default:
             setError();
             return;
     }
 
     uri += "&operand1=" + encodeURIComponent(operand1);
-    uri += "&operand2=" + encodeURIComponent(operand2);
+    
+    const singleOperandOps = ['log', 'log10', 'sqrt'];
+    if (!singleOperandOps.includes(operation)) {
+        uri += "&operand2=" + encodeURIComponent(operand2);
+    }
 
     setLoading(true);
 
@@ -114,6 +127,13 @@ function operationPressed(op) {
     operand1 = getValue();
     operation = op;
     state = states.operator;
+}
+
+function singleOperandPressed(op) {
+    operand1 = getValue();
+    operation = op;
+    state = states.complete;
+    calculate(operand1, 0, operation);
 }
 
 function equalPressed() {
