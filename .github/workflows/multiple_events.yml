@@ -1,0 +1,80 @@
+name: Multiple Events Workflow
+
+on:
+    workflow_dispatch:
+        inputs:
+            reason:
+                description: 'Reason for manually triggering the pipeline'
+                required: false
+                default: 'Manual trigger'
+    schedule:
+        - cron: '30 0 * * 0'  # Every Sunday at 00:30 UTC
+        - cron: '0 12 * * 3'  # Every Wednesday at 12:00 UTC
+
+    push:
+        branches-ignore:
+            - 'release/**'
+
+    pull_request:
+        types: [opened, synchronize, reopened]
+        branches:
+            - main
+            - develop
+env:
+    NODE_ENV: production
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                node-version: [18.x, 20.x]
+        outputs:
+           node-env: ${{ steps.set-env.outputs.node-env }}
+        steps:
+            - name : Print environment name
+              id: set-env
+              if: ${{ env.NODE_ENV == 'production' }}
+              run: |
+                echo "You are in production environment"
+                echo "This is another way to acces env variable NODE_ENV : ${{env.NODE_ENV }}"
+                echo "NODE_ENV = $NODE_ENV" >> GITUB_OUTPUT
+
+
+            - name : Try to print a secret variable
+              run: echo "The secret value is ${{secrets.TOP_SECRET}}"
+                          
+            - name: Checkout code
+              #uses: actions/checkout@v4
+              run: echo "Run checkout commented out"
+
+            - name: Set up Node.js
+              #uses: actions/setup-node@v4
+              #with:
+              #    node-version: ${{matrix.node-version}}
+              #    cache: 'npm'
+              run: echo "Run setup-node commented out"
+
+            - name: Install dependencies
+              #run: npm install
+              run: echo "Run install commented out"
+
+            - name: Run tests
+              #run: npm test
+              run: echo "Rn tests commented out"
+
+    deploy:
+        needs: build
+        runs-on: ubuntu-latest
+        # Deploy only on manual trigger or scheduled runs
+        if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
+        steps:
+            - name : Print environment name from build job
+              run: echo "Environment from build job is ${{ needs.build.outputs.node-env }}"
+
+            - name: Checkout code
+              # uses: actions/checkout@v4
+              run: echo "Checkout code commented out"
+
+            - name: Deploy application
+              run: echo "Deploying application..." # Replace with actual deployment commands
