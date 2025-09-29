@@ -33,6 +33,9 @@ function calculate(operand1, operand2, operation) {
         case '/':
             uri += "?operation=divide";
             break;
+        case '^':
+            uri += "?operation=power";
+            break;
         default:
             setError();
             return;
@@ -53,6 +56,45 @@ function calculate(operand1, operand2, operation) {
             setValue(response.result);
         } else {
             setError();
+        }
+    };
+    http.send(null);
+}
+
+function calculateUnary(operand1, operation) {
+    let uri = location.origin + "/arithmetic";
+    
+    switch (operation) {
+        case 'log':
+            uri += "?operation=log";
+            break;
+        case 'ln':
+            uri += "?operation=ln";
+            break;
+        default:
+            setError();
+            return;
+    }
+
+    uri += "&operand1=" + encodeURIComponent(operand1);
+
+    setLoading(true);
+
+    const http = new XMLHttpRequest();
+    http.open("GET", uri, true);
+    http.onload = function () {
+        setLoading(false);
+
+        if (http.status == 200) {
+            const response = JSON.parse(http.responseText);
+            setValue(response.result);
+        } else {
+            const errorResponse = JSON.parse(http.responseText);
+            if (errorResponse.error) {
+                setValue("ERROR");
+            } else {
+                setError();
+            }
         }
     };
     http.send(null);
@@ -130,6 +172,18 @@ function equalPressed() {
     }
 
     calculate(operand1, operand2, operation);
+}
+
+function logPressed() {
+    const currentValue = getValue();
+    calculateUnary(currentValue, 'log');
+    state = states.complete;
+}
+
+function lnPressed() {
+    const currentValue = getValue();
+    calculateUnary(currentValue, 'ln');
+    state = states.complete;
 }
 
 // TODO: Add key press logics
