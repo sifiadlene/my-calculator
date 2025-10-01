@@ -293,4 +293,90 @@ describe('Arithmetic', function () {
                 });
         });
     });
+
+    describe('Logarithm (base 10)', function () {
+        it('calculates log of 100', function (done) {
+            request.get('/arithmetic?operation=log&operand1=100')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 2 });
+                    done();
+                });
+        });
+        it('calculates log of 10', function (done) {
+            request.get('/arithmetic?operation=log&operand1=10')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 1 });
+                    done();
+                });
+        });
+        it('calculates log of 1', function (done) {
+            request.get('/arithmetic?operation=log&operand1=1')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 0 });
+                    done();
+                });
+        });
+        it('rejects log of negative number', function (done) {
+            request.get('/arithmetic?operation=log&operand1=-5')
+                .expect(400)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ error: "Le logarithme n'est défini que pour les nombres strictement positifs" });
+                    done();
+                });
+        });
+        it('rejects log of zero', function (done) {
+            request.get('/arithmetic?operation=log&operand1=0')
+                .expect(400)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ error: "Le logarithme n'est défini que pour les nombres strictement positifs" });
+                    done();
+                });
+        });
+    });
+
+    describe('Natural Logarithm (ln)', function () {
+        it('calculates ln of e', function (done) {
+            request.get('/arithmetic?operation=ln&operand1=2.718281828459045')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body.result).to.be.closeTo(1, 0.0000001);
+                    done();
+                });
+        });
+        it('calculates ln of 1', function (done) {
+            request.get('/arithmetic?operation=ln&operand1=1')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 0 });
+                    done();
+                });
+        });
+        it('calculates ln of 2', function (done) {
+            request.get('/arithmetic?operation=ln&operand1=2')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body.result).to.be.closeTo(0.693147, 0.000001);
+                    done();
+                });
+        });
+        it('rejects ln of negative number', function (done) {
+            request.get('/arithmetic?operation=ln&operand1=-5')
+                .expect(400)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ error: "Le logarithme n'est défini que pour les nombres strictement positifs" });
+                    done();
+                });
+        });
+        it('rejects ln of zero', function (done) {
+            request.get('/arithmetic?operation=ln&operand1=0')
+                .expect(400)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ error: "Le logarithme n'est défini que pour les nombres strictement positifs" });
+                    done();
+                });
+        });
+    });
 });
