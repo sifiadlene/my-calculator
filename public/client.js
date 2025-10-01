@@ -33,13 +33,22 @@ function calculate(operand1, operand2, operation) {
         case '/':
             uri += "?operation=divide";
             break;
+        case 'log':
+            uri += "?operation=log";
+            break;
+        case 'ln':
+            uri += "?operation=ln";
+            break;
         default:
             setError();
             return;
     }
 
     uri += "&operand1=" + encodeURIComponent(operand1);
-    uri += "&operand2=" + encodeURIComponent(operand2);
+    
+    if (operation !== 'log' && operation !== 'ln') {
+        uri += "&operand2=" + encodeURIComponent(operand2);
+    }
 
     setLoading(true);
 
@@ -130,6 +139,12 @@ function equalPressed() {
     }
 
     calculate(operand1, operand2, operation);
+}
+
+function unaryOperationPressed(op) {
+    const currentValue = getValue();
+    calculate(currentValue, 0, op);
+    state = states.complete;
 }
 
 // TODO: Add key press logics
