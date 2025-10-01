@@ -11,7 +11,12 @@
     "start": "nodemon server.js",
     "build": "exit 0",
     "lint": "eslint ./api/**/*.js ./server.js",
-    "test": "nyc --reporter=cobertura --reporter=html --reporter=text mocha --timeout 10000 --reporter mocha-multi-reporters --reporter-options configFile=test/config.json && ./node_modules/.bin/gulp inlinesource"
+    "test": "nyc --reporter=cobertura --reporter=html --reporter=text mocha --timeout 10000 --reporter mocha-multi-reporters --reporter-options configFile=test/config.json && ./node_modules/.bin/gulp inlinesource",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:debug": "playwright test --debug",
+    "playwright:install": "playwright install"
   },
   "keywords": [
     "azure",
@@ -28,6 +33,8 @@
     "nodemon": "^3.1.10"
   },
   "devDependencies": {
+    "@playwright/test": "^1.55.1",
+    "@types/node": "^24.6.1",
     "chai": "^5.2.0",
     "eslint": "^9.30.1",
     "globals": "^16.3.0",
