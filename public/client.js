@@ -33,13 +33,20 @@ function calculate(operand1, operand2, operation) {
         case '/':
             uri += "?operation=divide";
             break;
+        case '√':
+            uri += "?operation=sqrt";
+            break;
         default:
             setError();
             return;
     }
 
     uri += "&operand1=" + encodeURIComponent(operand1);
-    uri += "&operand2=" + encodeURIComponent(operand2);
+    
+    // Only add operand2 for binary operations
+    if (operation !== '√') {
+        uri += "&operand2=" + encodeURIComponent(operand2);
+    }
 
     setLoading(true);
 
@@ -52,7 +59,12 @@ function calculate(operand1, operand2, operation) {
             const response = JSON.parse(http.responseText);
             setValue(response.result);
         } else {
-            setError();
+            const response = JSON.parse(http.responseText);
+            if (response.error) {
+                setError(response.error);
+            } else {
+                setError();
+            }
         }
     };
     http.send(null);
@@ -132,6 +144,18 @@ function equalPressed() {
     calculate(operand1, operand2, operation);
 }
 
+function sqrtPressed() {
+    const currentValue = getValue();
+    
+    if (currentValue < 0) {
+        setError("Impossible de calculer la racine carrée d'un nombre négatif");
+        return;
+    }
+    
+    calculate(currentValue, null, '√');
+    state = states.complete;
+}
+
 // TODO: Add key press logics
 document.addEventListener('keypress', (event) => {
     if (event.key.match(/^\d+$/)) {
@@ -181,8 +205,12 @@ function setValue(n) {
     document.getElementById("result").innerHTML = html;
 }
 
-function setError(n) {
-    document.getElementById("result").innerHTML = "ERROR";
+function setError(message) {
+    if (message) {
+        document.getElementById("result").innerHTML = message;
+    } else {
+        document.getElementById("result").innerHTML = "ERROR";
+    }
 }
 
 function setLoading(loading) {
