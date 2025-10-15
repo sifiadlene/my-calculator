@@ -1,0 +1,23 @@
+{
+	"servers": {
+		"github-mcp": {
+			"type": "http",
+			"url": "https://api.githubcopilot.com/mcp"
+		},
+		"Azure MCP Server": {
+			"command": "npx",
+			"args": [
+				"-y",
+				"@azure/mcp@latest",
+				"server",
+				"start"
+			],
+			"type": "stdio"
+		},
+		"context7": {
+			"url": "https://mcp.context7.com/mcp",
+			"type": "http"
+		}
+	},
+	"inputs": []
+}
