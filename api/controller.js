@@ -24,7 +24,8 @@ exports.calculate = function(req, res) {
 
   const operation = operations[req.query.operation];
 
-  if (!operation) {
+  if (!Object.prototype.hasOwnProperty.call(operations, req.query.operation) ||
+      typeof operation !== 'function') {
     throw new Error("Invalid operation: " + req.query.operation);
   }
 
